@@ -8,5 +8,5 @@ function handleClick() {
     let userInput = document.getElementById("todoInput").value;
     todos.push(userInput);
 
-    console.log(userInput);
+    console.log(todos);
 }

@@ -19,16 +19,8 @@ function handleClick() {
 
 
 
-// *** Ends the making of the list of Todos ***
-
-
-
-
-
-
-
-
-
+// *** Creates the <li> items, which includes the TODO, an EDIT button, and DELETE button ***
+// *** Adds an eventlistener to every button
 
 
 function createList() {
@@ -41,10 +33,10 @@ function createList() {
         document.getElementById("listItems").innerHTML = individualItem;
         counter++;
     });
+
     for(var i = 0; i < document.querySelectorAll(".delete").length; i++) {
         
         document.querySelectorAll(".delete")[i].addEventListener("click", function(e) {
-           //console.log("delete button hit");
             handleDelete(e);
         });
     }
@@ -52,7 +44,6 @@ function createList() {
     for(var i = 0; i < document.querySelectorAll(".edit").length; i++) {
         
         document.querySelectorAll(".edit")[i].addEventListener("click", function(e) {
-            //console.log("edit button hit");
             handleEdit(e);
         });
     }
@@ -62,30 +53,16 @@ function createList() {
 
 
 
+// *** Deletes element from the array and the entire <li> that correspond with the deleted array element,
+// *** then replaces all the remaining <li> items, updating the id attribute to correspond with the items new position within the array.
+
+// *** There was an issue with the last <li> not getting removed from the html, but getting removed from the array,
+// *** the conditional fixes that problem.
+
 function handleDelete(e) {
         
-    let classesString = e.target.className;
-    
-    let classes = [];
-    classes = classesString.split(' ');
-
-    let leng = 0;
-    let longest;
-
-    for (var i = 0; i < classes.length; i++) {
-        if(classes[i].length > leng) {
-            leng = classes[i].length;
-            longest = classes[i];
-        }
-    }
-
-
-    let buttonNumber = "";
     let lengthOfId = 6;
-    for(let i = lengthOfId; i < longest.length; i++) {
-        buttonNumber += longest[i];
-    }
-
+    let buttonNumber = getIdAttri(e, lengthOfId);
 
     todos.splice(Number(buttonNumber),1);
 
@@ -95,13 +72,32 @@ function handleDelete(e) {
         document.getElementById("delete0").remove();
     }
 
-    
-    console.log(todos);
-
-
 }
 
+
+// *** Edits an array element using prompt to get the new input from the user.
+// *** Then list is updated to reflect the change.
+// *** The cancel button is null, to prevent null being the change, the conditional prevents changes unless there is something in the text field.
+
 function handleEdit(e) {
+    
+    let lengthOfId = 4;
+    let buttonNumber = getIdAttri(e, lengthOfId);
+
+    let editedTodo = prompt("Edit your todo....");
+    
+    if(editedTodo != null) {
+        todos[buttonNumber] = editedTodo;
+    }
+
+    createList();
+    
+}
+
+
+// *** Finds the id attribute of the parent of the button. Otherwise only the button is affected by changes with the handleDelete and handleEdit
+
+function getIdAttri (e, lengthOfId) {
     let classesString = e.target.className;
     
     let classes = [];
@@ -116,30 +112,14 @@ function handleEdit(e) {
             longest = classes[i];
         }
     }
-    console.log(longest);
-
-
+    
     let buttonNumber = "";
-    let lengthOfId = 4;
+    
     for(let i = lengthOfId; i < longest.length; i++) {
         buttonNumber += longest[i];
     }
-    console.log(buttonNumber);
-
-
-    let editedTodo = prompt("Edit your todo....");
-    //console.log(typeof(editedTodo));
-
-    if(editedTodo != null) {
-        todos[buttonNumber] = editedTodo;
-    }
-
     
-    if(todos.length !== 0) {
-        createList();
-    }
-
-    console.log(todos);
+    return buttonNumber;
 }
 
 

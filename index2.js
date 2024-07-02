@@ -37,15 +37,23 @@ function createList() {
     let counter = 0;
 
     todos.forEach((item) => {
-        individualItem += '<li id="delete' + counter + '">' + item + '<button class="delete' + counter + ' delete"> delete</button></li> ';
+        individualItem += '<li id="delete' + counter + '" id="edit' + counter + '">' + item + '<button class="edit' + counter + ' edit"> edit</button><button class="delete' + counter + ' delete"> delete</button></li> ';
         document.getElementById("listItems").innerHTML = individualItem;
         counter++;
     });
     for(var i = 0; i < document.querySelectorAll(".delete").length; i++) {
         
         document.querySelectorAll(".delete")[i].addEventListener("click", function(e) {
+           //console.log("delete button hit");
             handleDelete(e);
-            //improvedDelete(e);
+        });
+    }
+
+    for(var i = 0; i < document.querySelectorAll(".edit").length; i++) {
+        
+        document.querySelectorAll(".edit")[i].addEventListener("click", function(e) {
+            //console.log("edit button hit");
+            handleEdit(e);
         });
     }
 
@@ -56,10 +64,10 @@ function createList() {
 
 function handleDelete(e) {
         
-    let classString = e.target.className;
+    let classesString = e.target.className;
+    
     let classes = [];
-
-    classes = classString.split(' ');
+    classes = classesString.split(' ');
 
     let leng = 0;
     let longest;
@@ -73,7 +81,8 @@ function handleDelete(e) {
 
 
     let buttonNumber = "";
-    for(let i = 6; i < longest.length; i++) {
+    let lengthOfId = 6;
+    for(let i = lengthOfId; i < longest.length; i++) {
         buttonNumber += longest[i];
     }
 
@@ -86,6 +95,77 @@ function handleDelete(e) {
         document.getElementById("delete0").remove();
     }
 
+    
+    console.log(todos);
+
+
+}
+
+function handleEdit(e) {
+    let classesString = e.target.className;
+    
+    let classes = [];
+    classes = classesString.split(' ');
+
+    let leng = 0;
+    let longest;
+
+    for (var i = 0; i < classes.length; i++) {
+        if(classes[i].length > leng) {
+            leng = classes[i].length;
+            longest = classes[i];
+        }
+    }
+    console.log(longest);
+
+
+    let buttonNumber = "";
+    let lengthOfId = 4;
+    for(let i = lengthOfId; i < longest.length; i++) {
+        buttonNumber += longest[i];
+    }
+    console.log(buttonNumber);
+
+
+    let editedTodo = prompt("Edit your todo....");
+    //console.log(typeof(editedTodo));
+
+    if(editedTodo != null) {
+        todos[buttonNumber] = editedTodo;
+    }
+
+    
+    if(todos.length !== 0) {
+        createList();
+    }
+
+    console.log(todos);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  ****************  UNNEEDED CODE, but might be useful elsewhere. It did work....  **************************
     //let specificID = longest;
     // let parentNode = document.querySelector('.' + longest).closest("li");
     // let specificID = parentNode.getAttribute('id');
@@ -103,18 +183,3 @@ function handleDelete(e) {
     //console.log("delete worked");
     //console.log(specificTodo.target);
     //console.log(classes);
-    console.log(todos);
-
-
-}
-
-function improvedDelete(e) {
-    let parent = e.target.closest('li');
-
-
-
-
-
-    console.log(parent);
-    //console.log(e.target);
-}
